@@ -1,0 +1,24 @@
+{
+  "name": "nunjucks-nodejs",
+  "version": "0.0.1",
+  "description": "A quick test of Nunjucks running on NodeJS",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compile-templates": "nunjucks **/*.html -p templates"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com.crispioso/nunjucks-nodejs"
+  },
+  "author": "Crispin Merriman",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^3.4.1",
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "node-fetch": "^1.5.3",
+    "nunjucks": "^2.4.2",
+    "nunjucks-cli": "^0.4.8"
+  }
+}
