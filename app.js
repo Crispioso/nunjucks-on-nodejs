@@ -27,6 +27,7 @@ function renderPage(res, path) {
 
 	fetch(url)
 	    .then(function(res) {
+	    	// console.log(res.json());
 	        return res.json();
 	    }).then(function(json) {
 	        res.render('index.html', json);
@@ -36,16 +37,44 @@ function renderPage(res, path) {
 	    });
 }
 
+function returnData(res, path) {
+	var url = "https://www.ons.gov.uk" + (path ? path + '/data' : '/data');
+
+	console.log('Call to API');
+
+	fetch(url)
+	    .then(function(res) {
+	        return res.json();
+	    }).then(function(json) {
+	        res.send(json);
+	    }).catch(function(response) {
+	    	console.log(response);
+	    	res.send('Error');
+	    });
+}
+
 // Response to GET at root
 app.get( '/', function( req, res ) {
-	console.log('root');
 	renderPage(res);
+});
+
+// Handle request for favicon
+app.get( '/favicon.ico', function( req, res ) {
+	console.log('no favicon');
+});
+
+// Get static pattern library files
+app.use("/node_modules/sixteens", express.static(__dirname + '/node_modules/sixteens'));
+
+// Respond to request to API
+app.get('*/data', function(req, res) {
+	returnData(res, req.originUrl);
 });
 
 // Respond to all GET requests by rendering relevant data ONS API
 app.get( '/*', function( req, res ) {
-	console.log(req.originalUrl);
 	var path =  req.originalUrl;
+	console.log(path);
 	renderPage(res, path);
 });
 

@@ -1,9 +1,18 @@
 <!DOCTYPE html>
-<html>
-<head>
-	<title>{% block title %}{% endblock %}</title>
-</head>
-<body>
-	{% block body %}{% endblock %}
-</body>
+	<head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <title>{{description.title}} - Office for National Statistics</title>
+        <meta charset="utf-8" />
+        <meta content="width=device-width,initial-scale=1.0,user-scalable=1" name="viewport">
+        <meta content="on" http-equiv="cleartype" />
+        <meta name="format-detection" content="telephone=no">
+        <meta name="theme-color" content="#58595B">
+        <meta name="apple-mobile-web-app-status-bar-style" content="#58595B">
+        <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+
+        <link rel="stylesheet" type="text/css" href="/node_modules/sixteens/dist/css/main.css">
+	</head>
+	<body>
+		<h1>{{description.title}}</h1>
+	</body>
 </html>

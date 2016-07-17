@@ -5,7 +5,9 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "compile-templates": "nunjucks **/*.html -p templates"
+    "compile-templates": "nunjucks **/*.html -p templates",
+    "preinstall": "rm -rf ./node_modules/sixteens",
+    "postinstall": "cd ./node_modules && git clone -b live https://github.com/ONSdigital/sixteens && cd sixteens && npm rebuild node-sass && npm install"
   },
   "repository": {
     "type": "git",
