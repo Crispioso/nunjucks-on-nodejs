@@ -3,9 +3,13 @@
 var express     = require('express'),
     app         = express(),
     nunjucks    = require('nunjucks') ,
-    fetch 		= require('node-fetch');
+    fetch 		= require('node-fetch'),
+    Promise		= require('promise');
 
 fetch.Promise 	= require('bluebird');
+
+// Import data models for pages
+var t1 = require('./data/content/t1.js');
 
 // Define port to run server on
 var port = 9000 ;
@@ -22,6 +26,14 @@ nunjucks.configure( _templates, {
 app.engine( 'html', nunjucks.render ) ;
 app.set( 'view engine', 'html' ) ;
 
+function buildPageModel() {
+	t1().then(function(response) {
+			console.log(response);
+		}).catch(function(err) {
+			console.log(err);
+		});
+};
+
 function renderPage(res, path) {
 	var url = "https://www.ons.gov.uk" + (path ? path + '/data' : '/data');
 
@@ -30,6 +42,7 @@ function renderPage(res, path) {
 	    	// console.log(res.json());
 	        return res.json();
 	    }).then(function(json) {
+	    	buildPageModel();
 	        res.render('index.html', json);
 	    }).catch(function(response) {
 	    	console.log(response);
@@ -66,7 +79,7 @@ app.get( '/favicon.ico', function( req, res ) {
 // Get static pattern library files
 app.use("/node_modules/sixteens", express.static(__dirname + '/node_modules/sixteens'));
 
-// Respond to request to API
+// Respond to request to /data enpoint
 app.get('*/data', function(req, res) {
 	returnData(res, req.originUrl);
 });
