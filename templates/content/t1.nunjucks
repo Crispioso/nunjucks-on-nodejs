@@ -1,0 +1,14 @@
+<section>
+    <h2>Time series data</h2>
+    <ul>
+        {% for sectionResolved in sectionsResolved %}
+            <li><a href="{{ sectionResolved.uri }}">{{ sectionResolved.title }}</a></li>
+        {% endfor %}
+    </ul>
+</section>
+<section>
+    <h2>Publications</h2>
+    <ul>
+        <li><a href="/economy/environmentalaccounts/bulletins/ukenvironmentalaccounts/latest">Population estimates, mid-2015</a></li>
+    </ul>
+</section>

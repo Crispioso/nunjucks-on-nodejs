@@ -15,7 +15,10 @@
 	<body>
 		<h1>{{description.title}}</h1>
         {% if type == 'home_page' %}
-            {% include "t1.nunjucks" %}
+            {% include "content/t1.nunjucks" %}
+        {% endif %}
+        {% if type == 'bulletin' %}
+            {% include "content/t4.nunjucks" %}
         {% endif %}
         <script type="text/javascript" src="/node_modules/sixteens/dist/js/main.js"></script>
 	</body>

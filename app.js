@@ -10,9 +10,14 @@ fetch.Promise 	= require('bluebird');
 
 // Import data models for pages
 var t1 = require('./data/content/t1.js');
+var t4 = require('./data/content/t4.js');
 
 // Define port to run server on
 var port = 9000 ;
+
+// Define the address of my data API
+var baseAPIUrl = 'http://localhost:8082',
+    dataEndpoint = '/data?uri=';
 
 // Configure Nunjucks
 var _templates = 'templates';
@@ -39,6 +44,13 @@ function pageDataController(json) {
 				});
 				break;
 			}
+            case 'bulletin': {
+                t4(json).then(function(pageDataModel) {
+                    templateData = pageDataModel;
+                    resolve(templateData);
+                });
+                break;
+            }
 			default: {
 				console.log('no template for page type "' + json.type + '"');
 				templateData = json;
@@ -50,7 +62,8 @@ function pageDataController(json) {
 
 // Functions to render HTML or raw data
 function renderPage(res, path) {
-	var url = "https://www.ons.gov.uk" + (path ? path + '/data' : '/data');
+    var cleanPath = path ? path : '/';
+    var url = baseAPIUrl + dataEndpoint + cleanPath;
 
 	fetch(url)
 	    .then(function(res) {
@@ -66,7 +79,8 @@ function renderPage(res, path) {
 }
 
 function returnData(res, path) {
-	var url = "https://www.ons.gov.uk" + (path ? path + '/data' : '/data');
+    var cleanPath = path ? path.replace('/data', '') : '/';
+    var url = baseAPIUrl + dataEndpoint + cleanPath;
 
 	console.log('Call to public API');
 
@@ -82,12 +96,10 @@ function returnData(res, path) {
 }
 
 function returnTemplateData(res, path) {
-	var cleanPath = path.replace('/templatedata', '');
-	var url = "https://www.ons.gov.uk" + (cleanPath ? cleanPath + '/data' : '/data');
+    var cleanPath = path ? path.replace('/templatedata', '') : '/';
+    var url = baseAPIUrl + dataEndpoint + cleanPath;
 
 	console.log('Call to template data API');
-
-	console.log(url);
 
 	fetch(url)
 		.then(function(res) {
@@ -109,7 +121,7 @@ app.get( '/', function( req, res ) {
 
 // Handle request for favicon
 app.get( '/favicon.ico', function( req, res ) {
-	console.log('no favicon');
+	// console.log('no favicon');
 });
 
 // Get static pattern library files
@@ -128,7 +140,7 @@ app.get('*/data', function(req, res) {
 // Respond to all GET requests by rendering relevant data ONS API
 app.get( '/*', function( req, res ) {
 	var path =  req.originalUrl;
-	console.log(path);
+	console.log('Navigating to: ' + path);
 	renderPage(res, path);
 });
 

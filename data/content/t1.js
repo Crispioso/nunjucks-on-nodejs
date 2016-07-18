@@ -6,6 +6,10 @@ module.exports = function (data) {
     var Promise = require('promise'),
         fetch = require('node-fetch');
 
+    // Define the address of my data API
+    var baseAPIUrl = 'http://localhost:8082',
+        dataEndpoint = '/data?uri=';
+
     // Our function to resolve any data we need from another page
     var resolveData = function (url) {
         return new Promise(function (resolve, reject) {
@@ -22,34 +26,8 @@ module.exports = function (data) {
 
     /* Our data model for passing back to the template for rendering */
     var pageDataModel = data;
-    // Add in array for
+    // Add in array for resolved sections (ie time series data)
     pageDataModel.sectionsResolved = [];
-    // var dataModel = {
-    //     "intro": {
-    //         "title": "",
-    //         "markdown": ""
-    //     },
-    //     "headlineFigures": [],
-    //     "serviceMessage": "",
-    //     "type": "",
-    //     "uri": "",
-    //     "description": {
-    //         "title": "",
-    //         "summary": "",
-    //         "keywords": [
-    //             "statistics",
-    //             "economy",
-    //             "census",
-    //             "population",
-    //             "inflation",
-    //             "employment"
-    //         ],
-    //         "metaDescription": "",
-    //         "unit": "",
-    //         "preUnit": "",
-    //         "source": ""
-    //     }
-    // };
 
     /* Resolving headline data */
     var dataCount = data.sections.length,
@@ -57,7 +35,8 @@ module.exports = function (data) {
         dataPromises = [];
 
     for (i; i < dataCount; i++) {
-        var thisPromise = resolveData("https://www.ons.gov.uk" + data.sections[i].statistics.uri + '/data');
+        console.log(baseAPIUrl + dataEndpoint + data.sections[i].statistics.uri);
+        var thisPromise = resolveData(baseAPIUrl + dataEndpoint + data.sections[i].statistics.uri);
         dataPromises.push(thisPromise);
         thisPromise.then(function (response) {
             var resolvedData = {
