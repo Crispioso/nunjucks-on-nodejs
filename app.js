@@ -2,7 +2,7 @@
 
 var express     = require('express'),
     app         = express(),
-    nunjucks    = require('nunjucks') ,
+    nunjucks    = require('nunjucks'),
     fetch 		= require('node-fetch'),
     Promise		= require('promise');
 
@@ -23,27 +23,42 @@ nunjucks.configure( _templates, {
 });
 
 // Set Nunjucks as rendering engine for pages with .html suffix
-app.engine( 'html', nunjucks.render ) ;
-app.set( 'view engine', 'html' ) ;
+app.engine( 'html', nunjucks.render );
+app.set( 'view engine', 'html' );
 
-function buildPageModel() {
-	t1().then(function(response) {
-			console.log(response);
-		}).catch(function(err) {
-			console.log(err);
-		});
-};
+// Controller for which template page data to resolve and load into template
+function pageDataController(json) {
+	return new Promise(function(resolve, reject) {
+		var templateData;
 
+		switch (json.type) {
+			case 'home_page': {
+				t1(json).then(function(pageDataModel) {
+					templateData = pageDataModel;
+					resolve(templateData);
+				});
+				break;
+			}
+			default: {
+				console.log('no template for page type "' + json.type + '"');
+				templateData = json;
+				resolve(templateData);
+			}
+		}
+	});
+}
+
+// Functions to render HTML or raw data
 function renderPage(res, path) {
 	var url = "https://www.ons.gov.uk" + (path ? path + '/data' : '/data');
 
 	fetch(url)
 	    .then(function(res) {
-	    	// console.log(res.json());
 	        return res.json();
 	    }).then(function(json) {
-	    	buildPageModel();
-	        res.render('index.html', json);
+			pageDataController(json).then(function(resolvedData) {
+				res.render('index.html', resolvedData);
+			});
 	    }).catch(function(response) {
 	    	console.log(response);
 	    	res.send('Error');
@@ -53,7 +68,7 @@ function renderPage(res, path) {
 function returnData(res, path) {
 	var url = "https://www.ons.gov.uk" + (path ? path + '/data' : '/data');
 
-	console.log('Call to API');
+	console.log('Call to public API');
 
 	fetch(url)
 	    .then(function(res) {
@@ -64,6 +79,27 @@ function returnData(res, path) {
 	    	console.log(response);
 	    	res.send('Error');
 	    });
+}
+
+function returnTemplateData(res, path) {
+	var cleanPath = path.replace('/templatedata', '');
+	var url = "https://www.ons.gov.uk" + (cleanPath ? cleanPath + '/data' : '/data');
+
+	console.log('Call to template data API');
+
+	console.log(url);
+
+	fetch(url)
+		.then(function(res) {
+			return res.json();
+		}).then(function(json) {
+			pageDataController(json).then(function(resolvedData) {
+				res.send(resolvedData);
+			});
+		}).catch(function(response) {
+			console.log(response);
+			res.send('Error');
+		});
 }
 
 // Response to GET at root
@@ -79,9 +115,14 @@ app.get( '/favicon.ico', function( req, res ) {
 // Get static pattern library files
 app.use("/node_modules/sixteens", express.static(__dirname + '/node_modules/sixteens'));
 
-// Respond to request to /data enpoint
+// Respond to requst to /templatedata endpoint (ie data being used in template)
+app.get('*/templatedata', function(req, res) {
+	returnTemplateData(res, req.originalUrl);
+});
+
+// Respond to request to /data endpoint
 app.get('*/data', function(req, res) {
-	returnData(res, req.originUrl);
+	returnData(res, req.originalUrl);
 });
 
 // Respond to all GET requests by rendering relevant data ONS API

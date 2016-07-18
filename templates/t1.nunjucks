@@ -1,0 +1,5 @@
+<ul>
+    {% for sectionResolved in sectionsResolved %}
+        <li><a href="{{ sectionResolved.uri }}">{{ sectionResolved.title }}</a></li>
+    {%  endfor %}
+</ul>
