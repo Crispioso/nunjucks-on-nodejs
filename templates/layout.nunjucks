@@ -13,13 +13,116 @@
         <link rel="stylesheet" type="text/css" href="/node_modules/sixteens/dist/css/main.css">
 	</head>
 	<body>
-		<h1>{{description.title}}</h1>
-        {% if type == 'home_page' %}
-            {% include "content/t1.nunjucks" %}
-        {% endif %}
-        {% if type == 'bulletin' %}
-            {% include "content/t4.nunjucks" %}
-        {% endif %}
+        <header>
+            {# LANGUAGE TOGGLE AND SECONDARY NAV - DESKTOP #}
+            <div class="wrapper">
+                <div class="header col-wrap">
+                    <div class="col col--lg-one-third col--md-one-third">
+                        <a href="/">
+                            <img class="main-logo" src="/node_modules/sixteens/dist/img/ons-logo.svg"
+                                 alt="Office for National Statistics">
+                        </a>
+                    </div>
+                    <div class="col col--lg-two-thirds col--md-two-thirds hide--sm print--hide language--js__container">
+                        &nbsp;
+                        {#<dl class="language js--hide">
+                            <dt class="language__title">Language:</dt>
+                            {{#if_eq location.hostname (concat "cy." (replace location.hostname "cy." ""))}}
+                            <dd class="language__item">
+                                <a href="{{> partials/language-toggle language="en"}}" class="language__link icon--hide">English (EN)</a>
+                            </dd>
+                            {{else}}
+                            <dd class="language__item">
+                                <a href="{{> partials/language-toggle language="cym"}}" class="language__link icon--hide">Cymraeg (CY)</a>
+                            </dd>
+                            {{/if_eq}}#}
+                        </dl>
+                    </div>
+                    <div class="secondary-nav col col--lg-two-thirds col--md-two-thirds print--hide">
+                        <ul class="secondary-nav__list js-nav-clone__list">
+                            <li class="secondary-nav__item">
+                                <a class="secondary-nav__link {% if uri == '/releasecalendar' %}secondary-nav__link--active{% endif %} js-nav-clone__link"
+                                   href="/releasecalendar">Release calendar</a>
+                            </li>
+                            <li class="secondary-nav__item">
+                                <a class="secondary-nav__link {% if uri == '/methodology' %}secondary-nav__link--active{% endif %} js-nav-clone__link"
+                                   href="/methodology">Methodology</a>
+                            </li>
+                            <li class="secondary-nav__item">
+                                <a class="secondary-nav__link {% if uri == '/news' %}secondary-nav__link--active{% endif %} js-nav-clone__link"
+                                   href="/news">Media</a>
+                            </li>
+                            <li class="secondary-nav__item">
+                                <a class="secondary-nav__link {% if uri == '/aboutus' %}secondary-nav__link--active{% endif %} js-nav-clone__link"
+                                   href="/aboutus">About</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            {# MAIN NAV #}
+            <div class="primary-nav print--hide">
+                <nav>
+                    {# MENU AND SEARCH TOGGLES ON MOBILE #}
+                    <ul class="nav--controls">
+                        <li class="nav--controls__item">
+                            <a href="#nav-primary" id="menu-toggle" aria-controls="nav-primary" class="nav--controls__menu">
+                                <span class="nav--controls__text">{{ labels.menu }}</span>
+                            </a>
+                        </li>
+                        <li class="nav--controls__item {#{{#if_any (eq listType "search") (eq listType "searchpublication") (eq listType "searchdata")}}search-is-expanded{{/if_any}}#}">
+                            <a href="#nav-search" id="search-toggle" aria-controls="nav-search"
+                               class="nav--controls__search">
+                                <span class="nav--controls__text">{{ labels.search }}</span>
+                            </a>
+                        </li>
+                    </ul>
+                    {# PRIMARY NAVIGATION #}
+                    <div class="wrapper nav-main--hidden" id="nav-primary">
+                        <ul class="primary-nav__list">
+                            <li class="primary-nav__item {% if uri == '/' %}primary-nav__item--active{% endif %} js-nav hide--sm old-ie--display-block">
+                                <a class="primary-nav__link col col--md-7 col--lg-9" href="/">Home</a></li>
+                            {# loop each top node #}
+                            {% for item in globalNav %}
+                                {% if item.type == 'taxonomy_landing_page' %}
+                                    <li class="primary-nav__item js-nav js-expandable {% if item.isCurrentPage %}primary-nav__item--active {% endif %}">
+                                        <a class="primary-nav__link col col--md-8 col--lg-10" href="{{ item.uri }}"
+                                           aria-haspopup="true">{{ item.description.title }}</a>
+                                        <ul class="primary-nav__child-list col col--md-16 col--lg-20 js-expandable__content js-nav-hidden jsEnhance"
+                                            aria-expanded="false" aria-label="submenu">
+                                            {# loop each child node #}
+                                            {% for childItem in item.children %}
+
+                                                <li class="primary-nav__child-item {% if childItem.isCurrentPage %}primary-nav__child-item--active{% endif %} js-expandable__child">
+                                                    <a class="primary-nav__child-link" tabindex="-1"
+                                                       href="{{ childItem.uri }}">{{ childItem.description.title }}</a>
+                                                </li>
+
+                                            {% endfor %}
+                                        </ul>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                            {# SECONDARY NAV - PRIMARY #}
+                            <li class="primary-nav__item js-nav">
+                                <a class="primary-nav__link  col col--md-8 col--lg-10" href="/surveys">
+                                    Taking part in a survey
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </header>
+        <main>
+            {% if type == 'home_page' %}
+                {% include "content/t1.nunjucks" %}
+            {% endif %}
+            {% if type == 'bulletin' %}
+                {% include "content/t4.nunjucks" %}
+            {% endif %}
+        </main>
         <script type="text/javascript" src="/node_modules/sixteens/dist/js/main.js"></script>
 	</body>
 </html>

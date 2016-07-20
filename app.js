@@ -121,11 +121,12 @@ app.get( '/', function( req, res ) {
 
 // Handle request for favicon
 app.get( '/favicon.ico', function( req, res ) {
-	// console.log('no favicon');
+    res.send('favicon here');
 });
 
-// Get static pattern library files
+// Get static files
 app.use("/node_modules/sixteens", express.static(__dirname + '/node_modules/sixteens'));
+app.use("/assets", express.static(__dirname + '/assets'));
 
 // Respond to requst to /templatedata endpoint (ie data being used in template)
 app.get('*/templatedata', function(req, res) {

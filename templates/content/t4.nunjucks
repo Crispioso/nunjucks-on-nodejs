@@ -1,1 +1,143 @@
-This is a bulletin
+<div class="page-intro background--gallery">
+    <div class="wrapper">
+        <div class="col-wrap">
+            <div class="col">
+                <nav>
+                    <div class="breadcrumb print--hide">
+                        <ol class="breadcrumb__list">
+                            {% for item in breadcrumb %}
+                                <li class="breadcrumb__item"><a href="{{ item.uri }}" class="breadcrumb__link">{{ item.description.title }}</a></li>
+                            {% endfor %}
+                            <li class="breadcrumb__item">{{ description.title }}</li>
+                        </ol>
+                    </div>
+                </nav>
+                <div class="col col--md-47 col--lg-48">
+                    <h1 class="page-intro__title ">{{ description.title }}{% if description.edition %}: {{ description.edition }}{% endif %}</h1>
+                    <p class="page-intro__content">{{ description.summary }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="alert">
+    <div class="wrapper">
+        <div class="col-wrap">
+            <div class="col">
+
+                {# LATEST RELEASE NOTIFICATION #}
+                {% if description.latestRelease %}
+                    <p class="alert__title">This is the latest release</p> <a class="alert__link" href="{{ previousReleasesUri }}">View previous releases</a>
+                {% else %}
+                    <p class="alert__title">This is not the latest release</p> <a class="btn btn--primary print--hide" href="{{ latestReleaseUri }}">View latest release</a>
+                {% endif %}
+
+                {# TODO CORRECTIONS AND ALERTS #}
+                {#<div class="show-hide show-hide--dark info-box margin-top-sm--3 margin-top-md--3 js-show-hide">
+                    <div class="js-show-hide__title"><button class="js-show-hide__button" type="button" aria-expanded="false" aria-controls="collapsible-0">
+                            <span class="icon icon-info icon-info--info-box"></span>
+                            <h2 class="show-hide__title alert--warning__title">
+                                Correction
+                            </h2>
+                        </button></div>
+                    <div class="js-show-hide__content" id="collapsible-0" aria-hidden="true">
+                        <section class="show-hide__content alert--warning__content section__content--markdown">
+                            <p class="alert__date">13 July 2016 11:25</p>
+                            <p>Minor errors were found in the oil and gas reference tables in the series 'Other volume changes' (JKOE, JKOS). The errors have been corrected. </p><p>Additionally, PARs have been removed from range of total oil and gas reserves and resources (JKOA, JKOB, JKOO, JKOP). This affected data in the bulletin text only and has now been corrected. </p><p>ONS apologises for any inconvenience.</p>
+                            <a class="btn btn--tertiary margin-bottom-sm--3 margin-bottom-md--3 print--hide" href="/economy/environmentalaccounts/bulletins/ukenvironmentalaccounts/2016/previous/v1">View superseded version</a>
+                        </section>
+                    </div>
+                </div>#}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="meta-wrap">
+    <div class="wrapper">
+        <div class="col-wrap">
+            <p class="col col--md-16 col--lg-20 meta__item">
+                {% if description.nationalStatistic %}<a class="icon--hide" href="https://www.statisticsauthority.gov.uk/national-statistician/types-of-official-statistics/" target="_blank"><img class="meta__image" src="/assets/imgs/national-statistics.png" alt="National Statistics logo"></a>{% endif %}
+                <span>Contact: </span><br><a href="mailto:{{ description.contact.email }}" data-ga-event="" data-ga-event-category="mailto" data-ga-event-label="{{ description.contact.email }}">{% if description.contact.name %}{{ description.contact.name }}{% else %}{{ description.contact.email }}{% endif %}</a>
+            </p>
+            <p class="col col--md-16 col--lg-20 meta__item">
+                <span>Release date: </span><br>{{ description.formattedReleaseDate }}<br>
+            </p>
+            <p class="col col--md-16 col--lg-20 meta__item">
+                <span>Next release: </span><br>{{ description.nextRelease }}
+            </p>
+        </div>
+    </div>
+</div>
+<div class="page-content border-top--iron-sm border-top--iron-md">
+    <div class="wrapper">
+        <div class="col-wrap border-bottom--iron-md">
+            <div class="col col--md-31 col--lg-41 margin-left-md--1">
+                <div class="table-of-contents js-sticky-toc print--avoid-break">
+                    <h2 class="table-of-contents__title">Table of contents</h2>
+                    <ol id="toc" class="table-of-contents__list">
+                        {% for section in sections %}
+                            <li class="table-of-contents__item">
+                                <a href="#{{ section.slug }}" class="js-scroll" data-ga-event=""
+                                   data-ga-event-category="toc-link" data-ga-event-label="{{ section.title }}">{{ section.title }}</a>
+                            </li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            </div>
+            <div class="col col--md-15 col--lg-16 margin-bottom-sm--2 margin-top-md--7 margin-bottom-md--2 margin-left-lg--2 padding-bottom-sm--2 padding-left-sm--1 padding-bottom-md--1 border-top--iron-sm border-right--iron-sm border-bottom--iron-sm border-left--iron-sm border-top--iron-md border-right--iron-md border-bottom--iron-md border-left--iron-md js-print-pdf print--hide">
+                <p class="text-right--md padding-top-md--0 padding-bottom-md--0 height--5 margin-bottom-md--0 print--hide nojs--hide js--show">
+                    <a href="" class="link-complex nojs--hide js--show js-print-page" data-ga-event="" data-ga-event-category="print" data-ga-event-label="{{ description.title }}{% if description.edition %}{{ description.edition }}{% endif %}">
+                        Print this <span class="lowercase">
+Statistical bulletin
+</span>
+                    </a>
+                    <span class="icon icon-print--dark"></span>
+                </p>
+                <p class="text-right--md padding-top-md--0 padding-bottom-md--0 height--5 margin-top-md--1 print--hide">
+                    <a href="{{ uri }}/pdf" class="link-complex js-pdf-dl-link" data-ga-event="" data-ga-event-category="pdf" data-ga-event-label="{{ description.title }}{% if description.edition %}{{ description.edition }}{% endif %}">
+                        Download as PDF
+                    </a>
+                    <span class="icon icon-download--dark"></span>
+                </p>
+            </div>
+        </div>
+
+        <article class="col col--md-36 col--lg-39 page-content__main-content js-sticky-toc__trigger">
+            {% for section in sections %}
+                <section id="{{ section.slug }}" class="section__content--markdown js-sticky-toc__section">
+                    <header>
+                        <h2><span class="section__content-number">1.</span> {{ section.title }}</h2>
+                    </header>
+                    {{ section.html|safe }}
+                    <a class="print--hide js-scroll" href="#toc">Back to table of contents</a>
+                </section>
+            {% endfor %}
+
+            <div class="margin-top--4 margin-bottom--4">
+                <section id="background-notes" class="js-show-hide js-sticky-toc__section section__content--markdown border-top--iron-sm border-top--iron-md border-bottom--iron-sm border-bottom--iron-md">
+                    <div class="show-hide show-hide--light">
+                        <div class="js-show-hide__title">
+                            <h2 class="show-hide__title flush">
+                                <span class="section__content-number">7.</span>Background notes
+                            </h2>
+                        </div>
+                        <div class="js-show-hide__content margin-bottom--4">
+                            <ol>
+                                <li><p></p><h3>News</h3><p></p><h4>Household Inflation Index</h4><p>On 9 March 2016, the UK Statistics Authority published a letter from the National Statistician to the Chair of the Authority about the future of consumer inflation statistics. In the letter, he acknowledged calls for a measure of inflation showing the effect of changes in payments for goods and services, a so-called “Household Inflation Index” (HII). This index would be fundamentally different in a number of important aspects from the traditional measurement of consumer inflation. These differences include the potential inclusion of asset prices and interest payments, as well as giving each household’s expenditure equal weight. The HII could also be a vehicle for measuring different households’ experience of changes in prices. In July/August, we will publish a discussion paper based on our early explorations into the concepts of the HII. We are keen to receive feedback from users on the paper.</p><h4>Re-assessment of CPIH</h4><p>CPIH has been re-assessed to evaluate the extent to which it meets the professional standards set out in the Code of Practice for Official Statistics and the assessment report <a href="https://www.statisticsauthority.gov.uk/publication/statistics-on-consumer-price-inflation-including-owner-occupiers-housing-costs/">Statistics on consumer Price Inflation including Owner Occupiers’ Housing Costs</a>, published on 3 March 2016. The report includes a number of requirements that need to be implemented for CPIH to regain its status as a National Statistic. The actions taken to address these requirements will be reported to the UK Statistics Authority by September 2016.</p><h4>Personal Inflation Calculator</h4><p>The interactive Personal Inflation Calculator which could be used by people to calculate their personal inflation based on their spending patterns has currently been removed from the website. The facility was used by a very small number of people.</p></li>
+                                <li><h3>Understanding and accessing the data</h3><p>A full description of how consumer price indices are compiled is given in the <a href="http://webarchive.nationalarchives.gov.uk/20160105160709/http:/www.ons.gov.uk/ons/guide-method/user-guidance/prices/cpi-and-rpi/cpi-technical-manual/index.html">Consumer Price Indices Technical Manual</a>. This is supplemented by further information available from the <a href="https://www.ons.gov.uk/economy/inflationandpriceindices/methodologies/pricesuserguidancemethodologyanddevelopments">prices guidance and methodology webpage</a>.</p><p>A more detailed <a href="http://www.ons.gov.uk/economy/inflationandpriceindices/qmis/consumerpriceinflationqmi">Consumer Price Inflation Quality and Methodology report</a> for this statistical bulletin is available. The report assesses consumer price inflation statistics against standard dimensions of quality such as relevance, accuracy and accessibility. The report was last updated in October 2013.</p><p>The <a href="http://webarchive.nationalarchives.gov.uk/20160105160709/http:/www.ons.gov.uk/ons/guide-method/method-quality/quality/triennial-reviews/index.html">mini Triennial Review</a> of the CPI and RPI Central Collection of Prices is available.</p><p>All consumer price inflation data (including Excel dataset, time series data and explorable datasets) can be found on the <a href="https://www.ons.gov.uk/economy/inflationandpriceindices/bulletins/consumerpriceinflation/june2016/relateddata">Consumer Price Inflation: June 2016</a>.</p><p>To help users further, very detailed data are available, including the <a href="https://www.ons.gov.uk/economy/inflationandpriceindices/datasets/consumerpriceindicescpiandretailpricesindexrpiitemindicesandpricequotes">individual price quotes (for locally collected items only) and item indices</a> that underpin the consumer price inflation statistics. The item indices behind the measurement of owner occupiers’ housing costs are included for the first time in the first quarter 2016 data. Please note, the data that are published are at a level which means that no individual retailer or service provider can be identified. The data published cover January 1996 to March 2016. These data are updated once a quarter with around a 2-month lag with the latest CPI publication. For example, the data will next be updated when the August CPI is published on 13 September 2016, at which point the detailed data published will be extended to June 2016.</p><p>Internationally, the CPI is known as the Harmonised Index of Consumer Prices (HICP). HICPs are calculated in each member state of the European Union (EU) according to rules specified in a series of European regulations developed by the European Commission (Eurostat) in conjunction with the EU member states. Eurostat released figures for the Harmonised Index of Consumer Prices (HICP) for the month of June 2016 for EU member states, together with an EU average, on 15 July 2016. A summary of the latest European data is available from <a href="http://ec.europa.eu/eurostat/tgm/table.do?tab=table&amp;language=en&amp;pcode=teicp000&amp;tableSelection=1&amp;plugin=1">Eurostat’s database tables</a>. Further information on HICP for the EU, Euro area and other EU member states is available from <a href="http://ec.europa.eu/eurostat/web/hicp/overview">Eurostat's HICP web page</a>.</p></li>
+                                <li><h3>Methods ‒ CPI and other measures of inflation</h3><p>The CPI, CPIH, RPIJ and RPI are compiled using the same underlying price data, based on a large and representative selection of around 700 individual goods and services for which price movements are measured in around 140 randomly selected areas throughout the UK. Around 180,000 separate price quotations are used every month to compile the indices. The outlets in which the prices are collected are selected randomly. Expenditure weights are held constant for 1 year at a time.</p><p>The selection of goods and services that are priced to compile these indices is reviewed annually. The contents of the 2016 basket are described in an article <a href="http://www.ons.gov.uk/economy/inflationandpriceindices/articles/consumerpriceinflationbasketofgoodsandservices/2016">Consumer Price Inflation Basket of Goods and Services: 2016</a>. The expenditure weights used to compile the indices are also updated each year. Additional details of the updated weights for 2016 are available in an article published on 22 March 2016 entitled <a href="http://www.ons.gov.uk/economy/inflationandpriceindices/articles/consumerpricesindexandretailpricesindexupdatingweights/2016">Consumer Price Index and Retail Prices Index – updating weights: 2016</a>.</p><p>Rates of change for the CPI and CPIH are calculated from unrounded index levels, rather than from the published indices, which are rounded to 1 decimal place. The use of unrounded indices increases the accuracy of the calculation. The unrounded index levels for the CPI and CPIH are available from Tables 63 and 64 of the <a href="https://www.ons.gov.uk/economy/inflationandpriceindices/datasets/consumerpriceinflation">Consumer Price Inflation dataset</a>. By contrast, rates of change for the RPI and RPIJ are calculated from the published rounded indices.</p><p>Further information on the methods used to construct the CPI, CPIH, RPI and RPIJ, including differences in the methods used for each index, can be found in the <a href="http://webarchive.nationalarchives.gov.uk/20160105160709/http:/www.ons.gov.uk/ons/guide-method/user-guidance/prices/cpi-and-rpi/cpi-technical-manual/index.html">Consumer Price Indices technical manual</a>. <a href="http://webarchive.nationalarchives.gov.uk/20160105160709/http:/www.ons.gov.uk/ons/guide-method/user-guidance/prices/cpi-and-rpi/index.html">Users and uses of consumer price inflation statistics (2013)</a> provides further details of how consumer price statistics are used more generally.</p></li>
+                                <li><h3>Revisions policy</h3><p>On 15 October 2013, the <a href="http://webarchive.nationalarchives.gov.uk/20160105160709/http:/www.ons.gov.uk/ons/guide-method/user-guidance/prices/cpi-and-rpi/index.html">Consumer price inflation revisions policy</a> was published for the suite of consumer price inflation statistics. The policy reaffirms the existing practices for CPI and RPI and sets out the policies for the new CPIH and RPIJ measures.</p><p>In summary, CPI, CPIH and RPIJ are revisable in theory, though revisions only occur under exceptional circumstances. The RPI is never revised once published.</p></li>
+                                <li><h3>Publication policy</h3><p>This bulletin includes the June 2016 data, collected on and around 14 June 2016. Future <a href="http://www.ons.gov.uk/ons/guide-method/user-guidance/prices/cpi-and-rpi/publication-dates/index.html">publication dates</a> for this statistical bulletin are available to January 2018 (the publication of the December 2017 inflation figures). Publication dates from February 2017 onwards are provisional.</p><p>Consumer price inflation for July 2015 to July 2016 will be published on 16 August 2016.</p></li>
+                                <li><h3>Recorded message</h3><p>Consumer price inflation recorded message (available after 9.45am on release day): </p><p>Tel: + 44 (0) 800 0113703<br></p></li>
+                                <li><h3>Code of Practice</h3><p><a href="https://www.statisticsauthority.gov.uk/national-statistician/types-of-official-statistics/">National Statistics</a> are produced to high professional standards set out in the <a href="https://www.statisticsauthority.gov.uk/monitoring-and-assessment/code-of-practice/">Code of Practice for Official Statistics</a>. They undergo regular quality assurance reviews to ensure that they meet customer needs. They are produced free from any political interference and released according to the arrangements approved by the <a href="https://www.statisticsauthority.gov.uk/">UK Statistics Authority</a>.</p></li>
+                            </ol>
+                            <a class="print--hide js-scroll" href="#toc">Back to table of contents</a>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </article>
+    </div>
+</div>
